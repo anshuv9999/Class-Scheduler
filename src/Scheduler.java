@@ -2,6 +2,7 @@ import entry.Subject;
 import graphUtils.CycleDetector;
 import graphUtils.GraphHelper;
 import org.json.simple.JSONArray;
+import utils.Constants;
 import utils.ErrorHandler;
 import utils.InputValidator;
 import utils.Reader;
@@ -14,9 +15,7 @@ import java.util.List;
 public class Scheduler {
     public static void main(String[] args) {
         // Validate Input
-        if (!InputValidator.getInputValidator().validateInput(args)) {
-            throw new RuntimeException("Invalid Input");
-        }
+        InputValidator.getInputValidator().validateInput(args);
 
         JSONArray jsonArray = Reader.getReader().readFile(args[0]);
 
@@ -30,8 +29,8 @@ public class Scheduler {
 
         // This calls validates if the cycle contains graph. In case the graph contains cycle break
         if (CycleDetector.getCycleDetector().isCycleFound(subjectList)) {
-            ErrorHandler.getErrorHandler().printError("Cyclic Dependency found in file " + args[0]);
-            throw new RuntimeException("Cyclic Dependency found in file " + args[0]);
+            ErrorHandler.getErrorHandler().printError(String.format(Constants.CYCLIC_DEPENDENCY_FOUND, args[0]));
+            throw new RuntimeException(String.format(Constants.CYCLIC_DEPENDENCY_FOUND, args[0]));
         }
 
         // This calls prints final schedule

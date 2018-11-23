@@ -1,11 +1,12 @@
 package utils;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 
 public class InputValidatorTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -18,19 +19,19 @@ public class InputValidatorTest {
     @Test
     public void testCorrectInput() {
         String[] array = new String[1];
-        Assert.assertEquals(true, InputValidator.getInputValidator().validateInput(array));
+        Assert.assertTrue(InputValidator.getInputValidator().validateInput(array));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testZeroInput() {
         String[] array = new String[0];
-        Assert.assertEquals(false, InputValidator.getInputValidator().validateInput(array));
+        InputValidator.getInputValidator().validateInput(array);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testMoreThanOneInput() {
         String[] array = new String[2];
-        Assert.assertEquals(false, InputValidator.getInputValidator().validateInput(array));
+        InputValidator.getInputValidator().validateInput(array);
 
     }
 }

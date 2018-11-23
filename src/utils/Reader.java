@@ -19,8 +19,10 @@ public class Reader {
     }
 
     /*
-        Ensuring single object is created for this class. The method is made synchronised to resolve race conditions
-    */
+    Ensuring single object is created for this class using singleton pattern. The method is made synchronised to resolve race conditions
+   Though in the current use case since there will not be any chances of race conditions since,
+    it will not be receiving multiple requests at the same time.
+     */
     public synchronized static Reader getReader() {
         if (reader == null) {
             reader = new Reader();
@@ -42,8 +44,8 @@ public class Reader {
 
     public List<Subject> parseJsonArray(JSONArray jsonArray) {
         if (jsonArray == null) {
-            ErrorHandler.getErrorHandler().printError("Null JSON");
-            throw new RuntimeException("Null JSON");
+            ErrorHandler.getErrorHandler().printError(Constants.NULL_JSON);
+            throw new RuntimeException(Constants.NULL_JSON);
         }
 
         List<Subject> subjects = new ArrayList<>();
@@ -54,8 +56,9 @@ public class Reader {
             for (Object obj : jsonArray) {
                 JSONObject jsonObject = (JSONObject) obj;
                 // If the subject name is duplicated then throw error
-                throwErrorIfDuplicateSubject(subjectNames, (String) jsonObject.get(Constants.NAME));
-                subjectNames.add((String) jsonObject.get(Constants.NAME));
+                String subjectName = (String) jsonObject.get(Constants.NAME);
+                throwErrorIfDuplicateSubject(subjectNames, subjectName);
+                subjectNames.add(subjectName);
                 Subject subject = getSubject(jsonObject, subjectCode++);
                 subjects.add(subject);
             }
@@ -67,8 +70,8 @@ public class Reader {
 
         // Throw error if there is no subject defined in the file
         if (subjects.isEmpty()) {
-            ErrorHandler.getErrorHandler().printError("No subject found in the file");
-            throw new RuntimeException("No subject found in the file");
+            ErrorHandler.getErrorHandler().printError(Constants.EMPTY_FILE);
+            throw new RuntimeException(Constants.EMPTY_FILE);
         }
         return subjects;
     }
@@ -87,8 +90,8 @@ public class Reader {
 
     private void throwErrorIfDuplicateSubject(Set<String> subjectNames, String name) {
         if (subjectNames.contains(name)) {
-            ErrorHandler.getErrorHandler().printError("Duplicate subject name " + name);
-            throw new RuntimeException("Duplicate subject name " + name);
+            ErrorHandler.getErrorHandler().printError(String.format(Constants.DUPLICATE_SUBJECT_NAME, name));
+            throw new RuntimeException(String.format(Constants.DUPLICATE_SUBJECT_NAME, name));
         }
     }
 

@@ -1,8 +1,15 @@
 [
   {
+    "name": "Relativity",
+    "prerequisites": [
+      "Differential Equations",
+      "Intro to Physics"
+    ]
+  },
+  {
     "name": "Calculus",
     "prerequisites": [
-      "Calculus"
+      "Relativity"
     ]
   },
   {
@@ -19,13 +26,6 @@
     "name": "Intro to Physics",
     "prerequisites": [
       "Scientific Thinking"
-    ]
-  },
-  {
-    "name": "Relativity",
-    "prerequisites": [
-      "Differential Equations",
-      "Intro to Physics"
     ]
   },
   {

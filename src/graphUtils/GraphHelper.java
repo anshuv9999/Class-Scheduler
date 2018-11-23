@@ -5,6 +5,8 @@ import utils.ErrorHandler;
 
 import java.util.List;
 
+import static utils.Constants.PRE_REQ_NOT_FOUND;
+
 public class GraphHelper {
 
     private static GraphHelper graphHelper;
@@ -13,7 +15,9 @@ public class GraphHelper {
     }
 
     /*
-   Ensuring single object is created for this class. The method is made synchronised to resolve race conditions
+   Ensuring single object is created for this class using singleton pattern. The method is made synchronised to resolve race conditions
+   Though in the current use case since there will not be any chances of race conditions since,
+    it will not be receiving multiple requests at the same time.
     */
     public synchronized static GraphHelper getGraphHelper() {
         if (graphHelper == null) {
@@ -31,8 +35,8 @@ public class GraphHelper {
                 Subject preReqSubject = findPreReqSubject(subjects, preReq);
                 // If the prerequisite is not defined in the file, then throw error
                 if (preReqSubject == null) {
-                    ErrorHandler.getErrorHandler().printError("PreReq subject " + preReq + " not found");
-                    throw new RuntimeException("PreReq subject " + preReq + " not found");
+                    ErrorHandler.getErrorHandler().printError(String.format(PRE_REQ_NOT_FOUND, preReq, subject.getName()));
+                    throw new RuntimeException(String.format(PRE_REQ_NOT_FOUND, preReq, subject.getName()));
                 } else {
                     subject.getPrerequisitesConnections().add(preReqSubject);
                 }
